@@ -45,12 +45,6 @@ class Critic:
         net_states = layers.Activation('relu')(net_states)
         net_states = layers.Dropout(self.dropout_rate)(net_states)
 
-        net_states = layers.Dense(units=128, activation='relu',
-            kernel_regularizer=regularizers.l2(self.reg), activity_regularizer=regularizers.l1(self.reg))(net_states)
-        net_states = layers.BatchNormalization()(net_states)
-        net_states = layers.Activation('relu')(net_states)
-        net_states = layers.Dropout(self.dropout_rate)(net_states)
-
 #        net_states = layers.Dense(units=32, activation='relu')(states)
 #        net_states = layers.Dropout(self.dropout_rate)(net_states)  # Added dropout rate
 #        net_states = layers.BatchNormalization()(net_states) # Added batch normalization
@@ -64,12 +58,6 @@ class Critic:
         net_actions = layers.Dropout(self.dropout_rate)(net_actions)
 
         net_actions = layers.Dense(units=64, activation='relu',
-            kernel_regularizer=regularizers.l2(self.reg), activity_regularizer=regularizers.l1(self.reg))(net_actions)
-        net_actions = layers.BatchNormalization()(net_actions)
-        net_actions = layers.Activation('relu')(net_actions)
-        net_actions = layers.Dropout(self.dropout_rate)(net_actions)
-
-        net_actions = layers.Dense(units=128, activation='relu',
             kernel_regularizer=regularizers.l2(self.reg), activity_regularizer=regularizers.l1(self.reg))(net_actions)
         net_actions = layers.BatchNormalization()(net_actions)
         net_actions = layers.Activation('relu')(net_actions)

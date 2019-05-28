@@ -36,26 +36,24 @@ class Actor:
         states = layers.Input(shape=(self.state_size,), name='states')
 
         # Add hidden layers
+        # Try different layer sizes, activations, add batch normalization, regularizers, etc.
         net = layers.Dense(units=32, activation='relu',
-            kernel_regularizer=regularizers.l2(self.reg), activity_regularizer=regularizers.l1(self.reg))(states)
+            kernel_regularizer=regularizers.l2(self.reg),
+            activity_regularizer=regularizers.l1(self.reg))(states)
         net = layers.BatchNormalization()(net)
         net = layers.Activation('relu')(net)
         net = layers.Dropout(self.dropout_rate)(net)
 
         net = layers.Dense(units=64, activation='relu',
-            kernel_regularizer=regularizers.l2(self.reg), activity_regularizer=regularizers.l1(self.reg))(net)
-        net = layers.BatchNormalization()(net)
-        net = layers.Activation('relu')(net)
-        net = layers.Dropout(self.dropout_rate)(net)
-
-        net = layers.Dense(units=128, activation='relu',
-            kernel_regularizer=regularizers.l2(self.reg), activity_regularizer=regularizers.l1(self.reg))(net)
+            kernel_regularizer=regularizers.l2(self.reg),
+            activity_regularizer=regularizers.l1(self.reg))(net)
         net = layers.BatchNormalization()(net)
         net = layers.Activation('relu')(net)
         net = layers.Dropout(self.dropout_rate)(net)
 
         net = layers.Dense(units=32, activation='relu',
-            kernel_regularizer=regularizers.l2(self.reg), activity_regularizer=regularizers.l1(self.reg))(net)
+            kernel_regularizer=regularizers.l2(self.reg),
+            activity_regularizer=regularizers.l1(self.reg))(net)
         net = layers.BatchNormalization()(net)
         net = layers.Activation('relu')(net)
         net = layers.Dropout(self.dropout_rate)(net)
@@ -66,8 +64,6 @@ class Actor:
 #        net = layers.Dense(units=64, activation='relu')(net)
 #        net = layers.Dropout(self.dropout_rate)(net)  # Added dropout rate
 #        net = layers.Dense(units=32, activation='relu')(net)
-
-        # Try different layer sizes, activations, add batch normalization, regularizers, etc.
 
         # Add final output layer with sigmoid activation
         raw_actions = layers.Dense(units=self.action_size, activation='sigmoid',

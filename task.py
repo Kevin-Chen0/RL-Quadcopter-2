@@ -24,43 +24,35 @@ class Task():
         self.action_size = 4
 
         # Goal: target this location
-        self.target_pos = target_pos if target_pos is not None else np.array([10., 0., 10.])
+        self.target_pos = target_pos if target_pos is not None else np.array([10., 10., 10.])
         self.min_accuracy = min_acc
 
-        ## Numerical representation of the distance to the target
-        self.target_proximity = 0
-        self.total_proximity = []
-        self.average_proximity = 0.
-        self.best_proximity = np.inf
-
+        # Distance between the agent position and target position
+        self.target_distance = np.inf
+        self.average_distance = np.inf
+        self.best_distance = np.inf
+        self.total_distance = []
 
     def get_reward(self, done):
         """Uses current pose of sim to return reward."""
-#        distance_to_target = np.linalg.norm(self.target_pos - self.sim.pose[:3])
-#        sum_acceleration = np.linalg.norm(self.sim.linear_accel)
-#        reward = (5. - distance_to_target) * 0.3 - sum_acceleration * 0.05
-
-        self.target_proximity = np.linalg.norm(self.sim.pose[:3] - self.target_pos)
+        self.target_distance = (abs(self.sim.pose[:3] - self.target_pos)).sum()
         # Default reward
-        reward = 1 - 0.3*self.target_proximity
+        reward = 1 - 0.3*self.target_distance
 
         if done:
-            self.total_proximity.append(self.target_proximity)
-            self.average_proximity = np.mean(self.total_proximity[-10:])
-            if self.target_proximity < self.best_proximity:
-                self.best_proximity = self.target_proximity
+            self.total_distance.append(self.target_distance)
+            self.average_distance = np.mean(self.total_distance[-25:])
+            if self.target_distance < self.best_distance:
+                self.best_distance = self.target_distance
 
-        if self.target_proximity < self.min_accuracy * 4:
-            reward += 1000 - 100*self.target_proximity
-            ## Set major reward if agent gets to the target location (within an acceptable minimum accuracy).
-            ## And most importantly, it stops the simulation at that time, except hover, which can't stop early.
-            if self.target_proximity < self.min_accuracy * 2:
-                reward += 10000 - 1000*self.target_proximity
+        if self.target_distance < self.min_accuracy * 4:
+            reward += 1000 - 100*self.target_distance
 
-                if self.target_proximity < self.min_accuracy:
-                    ## Add an additional reward factor for reaching the target around the penultimate timestep,
-                    ## but not necessarily to rush there so quickly as to zoom past uncontrollably.
-                    reward += 100000 * (self.sim.time / (self.sim.runtime - 1))
+            if self.target_distance < self.min_accuracy * 2:
+                reward += 10000 - 1000*self.target_distance
+
+                if self.target_distance < self.min_accuracy:
+                    reward += 100000*(self.sim.time/(self.sim.runtime))
 
         return reward
 

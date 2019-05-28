@@ -7,7 +7,7 @@ from agents.ou_noise import OUNoise
 
 class DDPG():
     """Reinforcement Learning agent that learns using DDPG."""
-    def __init__(self, task, mu=0.02, theta=0.16, sigma=0.21, buffer=1000000,
+    def __init__(self, task, mu=0.02, theta=0.16, sigma=0.21, buffer=500000,
                  batch=64, gamma=0.98, tau=0.02, learning=0.001, dropout=0.2):
 
         self.task = task
