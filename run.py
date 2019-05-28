@@ -24,13 +24,13 @@ def perform(agent, num_episodes, key):
 
             if done:
                 print("\rEpisode = {:4d}, score = {:7.3f} (best score = {:7.3f}), " \
-                      "proximity = {:7.3f} (best proximity = {:7.3f})".format(
-                    i_episode, agent.score, agent.best_score, task.target_proximity,
-                    task.best_proximity), end="")
+                      "distance = {:7.3f} (best distance = {:7.3f})".format(
+                    i_episode, agent.score, agent.best_score, task.target_distance,
+                    task.best_distance), end="")
 
                 results['episode'].append(i_episode)
                 results['score'].append(agent.score)
-                results['proximity'].append(task.target_proximity)
+                results['distance'].append(task.target_distance)
                 results['duration'].append(duration)
                 break
 
@@ -72,7 +72,7 @@ if __name__ == '__main__':
     plt.legend()
     _ = plt.ylim()
     plt.figure(3)
-    plt.plot(results['episode'], results['proximity'], label='Proximity / Episode')
+    plt.plot(results['episode'], results['distance'], label='Distance / Episode')
     plt.legend()
     _ = plt.ylim()
     plt.figure(4)
